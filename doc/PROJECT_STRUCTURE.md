@@ -7,17 +7,17 @@
 ## 項目結構
 
 ```
-AutoClicker/
+OrangeClicker/
 ├── frontend/              # GUI 前端
 │   ├── views/            # GUI 視圖組件
 │   │   └── main_window.py
 │   ├── controllers/      # 控制器（連接 GUI 和後端）
-│   │   └── example_controller.py
+│   │   └── clicker_controller.py
 │   └── README.md
 │
 ├── backend/              # 後端業務邏輯
 │   ├── services/        # 服務類（業務邏輯）
-│   │   └── example_service.py
+│   │   └── clicker_service.py
 │   └── models/          # 數據模型（可選）
 │
 ├── main.py              # 程序入口
@@ -34,9 +34,9 @@ main.py
   │
   ├──► frontend/views/main_window.py  (GUI 視圖)
   │           │
-  │           └──► frontend/controllers/example_controller.py  (控制器)
+  │           └──► frontend/controllers/clicker_controller.py  (控制器)
   │                       │
-  │                       └──► backend/services/example_service.py  (後端服務)
+  │                       └──► backend/services/clicker_service.py  (後端服務)
   │                                   │
   │                                   └──► 業務邏輯處理
 ```
@@ -77,11 +77,11 @@ def main():
 
 ```python
 # frontend/views/main_window.py
-from frontend.controllers.example_controller import ExampleController
+from frontend.controllers.clicker_controller import ClickerController
 
 class MainWindow:
     def __init__(self):
-        self.controller = ExampleController()  # 創建控制器
+        self.controller = ClickerController()  # 創建控制器
     
     def on_button_click(self):
         result = self.controller.handle_start_button_click(config)
@@ -90,12 +90,12 @@ class MainWindow:
 ### 控制器
 
 ```python
-# frontend/controllers/example_controller.py
-from backend.services.example_service import ExampleService
+# frontend/controllers/clicker_controller.py
+from backend.services.clicker_service import ClickerService
 
-class ExampleController:
+class ClickerController:
     def __init__(self):
-        self.service = ExampleService()  # 直接創建服務實例
+        self.service = ClickerService()  # 直接創建服務實例
     
     def handle_start_button_click(self, config):
         return self.service.start_task(config)  # 直接調用
@@ -104,8 +104,8 @@ class ExampleController:
 ### 後端服務
 
 ```python
-# backend/services/example_service.py
-class ExampleService:
+# backend/services/clicker_service.py
+class ClickerService:
     def start_task(self, config):
         # 業務邏輯
         return {"status": "started"}

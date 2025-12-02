@@ -1,0 +1,16 @@
+{
+  "app.title": "Orange Clicker",
+  "menu.settings": "Settings",
+  "menu.settings.preferences": "Preferences",
+  "menu.settings.language": "Language",
+  "menu.settings.language.en": "English",
+  "menu.settings.language.zh-TW": "Traditional Chinese",
+  "menu.help": "Help",
+  "menu.help.user_guide": "User Guide",
+  "menu.help.about": "About",
+  "main.label.message": "Click the button to show a message",
+  "main.button.click": "Click Me",
+  "dialog.message.title": "Message",
+  "dialog.about.title": "About Orange Clicker",
+  "backend.hello": "Hello World"
+}

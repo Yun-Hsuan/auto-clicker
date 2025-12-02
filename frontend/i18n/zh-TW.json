@@ -1,0 +1,16 @@
+{
+  "app.title": "Orange Clicker",
+  "menu.settings": "設定",
+  "menu.settings.preferences": "偏好設定",
+  "menu.settings.language": "語言",
+  "menu.settings.language.en": "英文",
+  "menu.settings.language.zh-TW": "繁體中文",
+  "menu.help": "幫助",
+  "menu.help.user_guide": "使用說明",
+  "menu.help.about": "關於",
+  "main.label.message": "點擊按鈕顯示訊息",
+  "main.button.click": "點我",
+  "dialog.message.title": "訊息",
+  "dialog.about.title": "關於 Orange Clicker",
+  "backend.hello": "Hello World"
+}

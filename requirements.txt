@@ -1,2 +1,17 @@
-# Orange Clicker 項目依賴
+# Auto-Clicker Project Dependencies
+
+# GUI Framework
 pyside6>=6.6.0
+
+# Mouse and Keyboard Input (legacy / optional)
+pynput>=1.7.6
+keyboard>=0.13.5
+
+# Windows Native API (for high-performance mouse clicking)
+pywin32>=306
+
+# Packaging
+pyinstaller>=6.0.0
+
+# Image processing (for icon conversion PNG -> ICO)
+Pillow>=10.0.0

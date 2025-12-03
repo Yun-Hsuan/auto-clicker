@@ -3,11 +3,19 @@ Orange Clicker Main Application Entry Point
 """
 
 import sys
+import logging
 from PySide6.QtWidgets import QApplication
 from frontend.views.main_window import MainWindow
 from frontend.utils.icon_manager import IconManager
 from frontend.utils.font_manager import FontManager
 from frontend.i18n.translation_manager import TranslationManager
+
+# Configure logging to show debug messages in terminal
+logging.basicConfig(
+    level=logging.INFO,  # Set to DEBUG for more verbose output
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%H:%M:%S'
+)
 
 
 def main():

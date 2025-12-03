@@ -61,6 +61,15 @@ class TranslationManager:
     print(f"[i18n] Language set to '{lang}', fallback '{fallback_lang}'")
 
   @classmethod
+  def get_current_language(cls) -> str:
+    """Get the current language code.
+
+    Returns:
+      Current language code, e.g. "en", "zh-TW".
+    """
+    return cls._current_language
+
+  @classmethod
   def translate(cls, key: str, default: Optional[str] = None) -> str:
     """Translate a key using the current language.
 

@@ -1,8 +1,8 @@
-# Orange Clicker
+# Auto-Clicker
 
 A modern, cross‑platform desktop auto‑clicker built with **Python** and **PySide6**.
 
-Orange Clicker is designed as a clean, extensible desktop app with a clear frontend/backend
+Auto-Clicker is designed as a clean, extensible desktop app with a clear frontend/backend
 separation, proper dependency management, multi‑language UI support, and a focus on
 maintainability and future feature growth (click sequences, profiles, hotkeys, etc.).
 
@@ -10,26 +10,56 @@ maintainability and future feature growth (click sequences, profiles, hotkeys, e
 
 ## Features (Current & Planned)
 
-**Current**
-- Modern GUI built with **PySide6**
-- Clear **frontend/backend** architecture
-- Centralized **icon management** with multiple resolutions
-- Centralized **font management** with Noto Sans TC & Roboto
-- Simple **i18n system** based on JSON:
-  - English (`en`)
-  - Traditional Chinese (`zh-TW`)
-- Runtime **language switching** via menu:
-  - `Settings → Language → English`
-  - `Settings → Language → Traditional Chinese`
-- Basic example flow:
-  - Click button → backend service returns a localized “Hello World” → UI shows message
+**Current (Alpha)**
+- **Modern GUI & architecture**
+  - Built with **PySide6**
+  - Clear separation between `frontend/` (Qt UI) and `backend/` (services)
+  - Centralized **icon** / **font** / **theme** / **i18n** management
+- **Profiles**
+  - Multiple profiles (per‑game / per‑task)
+  - Per‑profile **start / end hotkeys**
+  - Toggle switch + status badge (`Setting`, `Active`, `Sleeping`)
+- **Cursor Position mode**
+  - Continuous clicking at current cursor position
+  - Configurable interval, mouse button, and click count
+  - Guard for **Infinite** click count (requires End hotkey)
+- **Click Path mode**
+  - Global hotkeys **Ctrl+W / Ctrl+Q** to start/stop recording
+  - Native Windows mouse hook to record:
+    - Click position
+    - Button (left / right / middle)
+    - Reaction time & listening method
+  - Click sequence editor composed of `ClickStepItem` + `DelayTimer`
+  - Execution engine replays `ClickStepItem → DelayTimer` in order
+- **Global hotkeys (Win32 API)**
+  - Unified keyboard listener built on `RegisterHotKey` with its own message loop thread
+  - Uses native **SendInput** for clicks (with safe fallbacks)
+- **Debugging & tooling**
+  - **Debug Mode** toggle with live log panel
+  - Extra controls like “Load Test Data” only visible in debug mode
+- **UI / UX**
+  - Tabs: **Cursor Position**, **Click Path**, **Visual Click (Coming Soon)**
+  - Themed buttons (`Clear All` gray → blue on hover, etc.)
+  - Goose‑themed dialogs for User Guide / About / Settings
+- **Internationalization**
+  - JSON‑based i18n:
+    - English (`en`)
+    - Traditional Chinese (`zh-TW`)
+  - Runtime language switching via:
+    - `Settings → Language → English`
+    - `Settings → Language → Traditional Chinese`
+- **Config & persistence**
+  - Profiles stored in user config directory
+  - Save flow that:
+    - Forces you to choose **Cursor Position** *or* **Click Path**
+    - Validates required fields and Infinite+End‑hotkey rules
 
 **Planned / Ideas**
-- Click sequence recording & playback
-- Multiple profiles (per‑game / per‑task)
-- Global hotkeys (start/stop)
-- Advanced timing options (interval, randomization, duration)
-- Configurable persistence (user config file)
+- Visual recognition click mode (`Visual Click` tab)
+- More advanced timing options (randomization, duration, schedules)
+- Better import/export of profiles and backup format
+- Test coverage for backend services, hotkeys, and Win32 integration
+- Windows packaging (`.exe`) with elevation and installer
 
 ---
 
@@ -53,7 +83,12 @@ auto-clicker/
 │   ├── __init__.py
 │   └── services/
 │       ├── __init__.py
-│       └── clicker_service.py      # Backend business logic (example: Hello World)
+│       ├── cursor_clicker_service.py      # Core clicker using Win32 SendInput
+│       ├── click_path_executor_service.py # Click path playback engine
+│       ├── click_path_hotkey_service.py   # Ctrl+W / Ctrl+Q wiring
+│       ├── profile_hotkey_service.py      # Per‑profile start/end hotkeys
+│       ├── config_manager.py              # Load/save config & profiles
+│       └── hotkey_service.py              # Shared hotkey utilities
 │
 ├── frontend/
 │   ├── __init__.py
@@ -126,21 +161,24 @@ From the project root, with the virtual environment activated:
 py main.py
 ```
 
-You should see the **Orange Clicker** main window with:
-- An icon in the window title bar
-- A label and a button
-- Menu bar with **Settings** and **Help**
+You should see the **Auto-Clicker** main window with:
+- Left panel listing profiles (each with toggle switch and status badge)
+- Right panel showing:
+  - Status badge
+  - Profile Name + Hotkey configuration row
+  - Tabs for **Cursor Position**, **Click Path**, and **Visual Click (Coming Soon)**
+  - Reset / Save buttons at the bottom
 
-Clicking the button will:
-- Call the backend `ClickerService`
-- Retrieve a localized “Hello World” message
-- Show it in a message box and update the label
+From there you can:
+- Configure a profile (name, hotkeys, click mode)
+- Record a click path with **Ctrl+W / Ctrl+Q**
+- Start / stop auto‑clicking using your configured hotkeys
 
 ---
 
 ## Internationalization (i18n)
 
-Orange Clicker uses a **simple JSON‑based i18n system**.
+Auto-Clicker uses a **simple JSON‑based i18n system**.
 
 - Language files:
   - `frontend/i18n/en.json`
@@ -157,7 +195,7 @@ from frontend.i18n.translation_manager import t, TranslationManager
 TranslationManager.set_language("en", fallback_lang="en")
 
 # Translate in UI
-self.setWindowTitle(t("app.title", default="Orange Clicker"))
+self.setWindowTitle(t("app.title", default="Auto-Clicker"))
 self.button.setText(t("main.button.click", default="Click Me"))
 ```
 
@@ -239,14 +277,12 @@ See `frontend/public/assets/fonts/README.md` and `USAGE_EXAMPLES.md` for more de
 
 ## Roadmap (High‑Level)
 
-- Implement real clicker logic (mouse events, intervals, sequences)
-- Add configuration UI:
-  - Click interval, button, mode
-  - Profiles (save/load to disk)
-  - Hotkey configuration
-- Persist user settings (e.g. JSON config in `backend/config/`)
-- Add tests for backend services and i18n
-- Package the app as a Windows `.exe` with a proper taskbar/start menu icon
+- Polish Click Path playback UX and error handling
+- Implement Visual recognition click mode (`Visual Click` tab)
+- Add more advanced scheduling/randomization options
+- Improve configuration import/export and backup
+- Add tests for backend services, hotkey layer, and i18n
+- Package the app as a Windows `.exe` with proper elevation and Start Menu integration
 
 ---
 

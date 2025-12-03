@@ -149,3 +149,4 @@ class MainWindow(QMainWindow):
 4. **後備方案**：如果字體加載失敗，會自動使用系統默認字體
 
 
+
